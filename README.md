@@ -5,7 +5,6 @@
 **Integrantes:**
 - [Julyeth Estefanía Diaz Rolón]
 - [Oscar Fabian Gomez Rincón]
-- [Alex Camilo Rodriguez Camargo]
 
 **Estado:** Lección 1 — infraestructura configurada, idea sin refinar aún.
 
