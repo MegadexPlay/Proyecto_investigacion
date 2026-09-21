@@ -1,0 +1,252 @@
+\documentclass[12pt,letterpaper,oneside]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla,es-noquoting]{babel}
+
+\usepackage{mathptmx}
+
+\usepackage[top=3cm,left=4cm,right=2cm,bottom=3cm]{geometry}
+
+\usepackage{setspace}
+\onehalfspacing
+
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{url}
+\urlstyle{same}
+
+\titleformat{\section}[block]
+  {\normalfont\bfseries\filcenter}{\thesection.}{0.5em}{\MakeUppercase}
+\titleformat{\subsection}[block]
+  {\normalfont\bfseries}{\thesubsection}{0.5em}{\MakeUppercase}
+\titlespacing*{\section}{0pt}{0pt}{18pt}
+\titlespacing*{\subsection}{0pt}{18pt}{12pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\definecolor{enconstr}{HTML}{A08030}
+\newcommand{\enconstruccion}[1]{%
+  \begin{center}
+    \tikz[baseline]{\node[draw=enconstr,rounded corners=6pt,inner xsep=8pt,inner ysep=3pt]
+      {\footnotesize\color{enconstr}\textsc{en construcción}};}\\[6pt]
+    \begin{minipage}{0.85\textwidth}
+      \centering\itshape\small #1
+    \end{minipage}
+  \end{center}
+  \vspace{1em}
+}
+
+\newcommand{\seccionsn}[1]{%
+  \phantomsection
+  \addcontentsline{toc}{section}{#1}
+  \begin{center}\bfseries\MakeUppercase{#1}\end{center}
+  \vspace{12pt}
+}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace*{1cm}
+
+{\bfseries UNIVERSIDAD PEDAGÓGICA Y TECNOLÓGICA DE COLOMBIA}\\[4pt]
+{\bfseries FACULTAD DE INGENIERÍA}\\[4pt]
+{\bfseries INGENIERÍA DE SISTEMAS Y COMPUTACIÓN}
+
+\vfill
+
+{\large\bfseries
+COSTO DE IMPLEMENTACIÓN E IMPACTO EN RENDIMIENTO DE LAS TÉCNICAS\\
+DE OPTIMIZACIÓN DE VIDEOJUEGOS EN EQUIPOS DE HARDWARE LIMITADO\\}
+
+\vspace{10pt}
+{\itshape\small Título provisional — se ajusta al formular la propuesta (Fase 3)}
+
+\vfill
+
+{\bfseries AUTORES}\\[10pt]
+Julyeth Estefanía Díaz Rolón\\
+Oscar Fabián Gómez Rincón
+
+\vfill
+
+{\small Documento elaborado en el marco del curso Metodología de la Investigación}\\[4pt]
+{\small Tunja, Colombia $\cdot$ 2026}
+
+\end{titlepage}
+
+\pagenumbering{roman}
+
+\begin{center}\bfseries CONTENIDO\end{center}
+\vspace{12pt}
+\begingroup
+\renewcommand{\contentsname}{}
+\vspace{-3em}
+\tableofcontents
+\endgroup
+\newpage
+
+\seccionsn{Índice de tablas}
+\enconstruccion{Aún no hay tablas incorporadas al cuerpo del documento. Se listan aquí a
+medida que cada fase incorpore tablas propias (matrices, resultados, operacionalización de
+variables, etc.).}
+\newpage
+
+\seccionsn{Índice de figuras}
+\enconstruccion{Aún no hay figuras incorporadas al cuerpo del documento. Se listan aquí a
+medida que cada fase incorpore figuras propias (diagramas, gráficos, esquemas, etc.).}
+\newpage
+
+\pagenumbering{arabic}
+
+\section{Planteamiento del problema}
+
+\subsection{Antecedentes}
+
+Con el paso del tiempo, los requerimientos de hardware necesarios para ejecutar videojuegos
+han aumentado de forma sostenida, como consecuencia del avance acelerado de la industria y de
+la tecnología que la sustenta. El costo energético y material de ese crecimiento ha sido
+documentado con mayor detalle para el caso de los centros de datos, donde se evidencia la
+misma tensión entre capacidad de cómputo disponible y demanda creciente de recursos~\cite{ref:nature}.
+
+A la par, los desarrolladores destinan cada vez más tiempo y presupuesto a aprovechar estas
+tecnologías para producir resultados visualmente más impresionantes, a costa de sacrificar el
+rendimiento en equipos de bajos recursos. Uno de los ejemplos más recientes es el lanzamiento
+del videojuego \textit{Grand Theft Auto VI}, en desarrollo desde que su antecesor salió al
+mercado en 2013: según lo anunciado, el juego alcanzaría con dificultad unos 30~cuadros por
+segundo (\textit{frames per second}, FPS) en las consolas de última generación, dejando por
+fuera a los equipos más desactualizados.
+
+A esto se suma la reducción progresiva de los presupuestos de desarrollo~\cite{ref:lund}, que
+sitúa a los estudios ante un dilema: entregar un producto incompleto pero bien optimizado, o
+un producto completo con poca o nula optimización. En la mayoría de los casos, la decisión de
+la casa desarrolladora tiende a ser la segunda.
+
+Un computador capaz de ejecutar los juegos de última generación a inicios de 2020 puede tener
+dificultades para abrir los lanzamientos más recientes; en equipos de diez años o más, hacerlo
+resulta prácticamente imposible. Aunque en varias ocasiones el obstáculo son
+incompatibilidades con nuevas tecnologías —como las versiones recientes de DirectX u OpenGL,
+o funciones más específicas como el trazado de rayos de NVIDIA—, es frecuente que el problema
+sea de rendimiento: el juego abre, pero a una tasa de cuadros que lo vuelve injugable.
+
+Se trata de un problema reciente, si se considera que en el pasado los equipos de desarrollo
+dedicaban una parte importante de sus esfuerzos a optimizar los juegos hasta el punto de que
+pudieran ejecutarse en el hardware de la época. Un caso ilustrativo es el del equipo encargado
+de portar \textit{Resident Evil 2} a la Nintendo~64: la versión original ocupaba cerca de
+1,3~GB gracias a la tecnología de discos de la PlayStation~1, y el equipo logró comprimirla a
+64~MB para un cartucho de Nintendo sin recortar contenido~\cite{ref:re2}.
+
+Este no es el único problema. Como se señala en \textit{What Game Developers Look for in a New
+Graduate}~\cite{ref:graduate}, las desarrolladoras más grandes esperan que sus aspirantes
+dominen el tema, y comprender las técnicas de optimización y sus ventajas resulta cada vez más
+difícil para los nuevos desarrolladores.
+
+Aunque existe documentación dispersa sobre técnicas puntuales de optimización
+(\textit{culling}, nivel de detalle o LOD, \textit{pooling} de objetos, compresión de texturas
+y \textit{batching} de llamadas de dibujo, entre otras), rara vez se encuentra un análisis
+comparativo que identifique cuáles de ellas ofrecen el mayor impacto en rendimiento con el
+menor costo de implementación, en particular desde la perspectiva de equipos con hardware
+limitado.
+
+\subsection{Descripción de la situación problemática}
+\enconstruccion{Se redacta cuando se libere el tema correspondiente en el Curso.}
+
+\subsection{Formulación del problema}
+\enconstruccion{Se redacta cuando se libere el tema correspondiente en el Curso.}
+
+\subsection{Consecuencias de no investigar}
+\enconstruccion{Se redacta cuando se libere el tema correspondiente en el Curso.}
+
+\subsection{Delimitación}
+\enconstruccion{Se redacta cuando se libere el tema correspondiente en el Curso.}
+
+\newpage
+\section{Justificación}
+\enconstruccion{Se redacta en la Fase 3 del Curso (Formulación de la propuesta).}
+
+\newpage
+\section{Objetivos}
+\enconstruccion{Se redacta en la Fase 3 del Curso.}
+
+\newpage
+\section{Alcance de la investigación}
+\enconstruccion{Sección incorporada según Hernández-Sampieri (tipo de estudio: exploratorio,
+descriptivo, correlacional o explicativo) — no aparece como título propio en la NTC 1486.
+Se redacta en la Fase 3.}
+
+\newpage
+\section{Formulación de hipótesis}
+\enconstruccion{Sección incorporada según Hernández-Sampieri, Tamayo y Tamayo y Bernal — no
+aparece como título propio en la NTC 1486. Se redacta en la Fase 3.}
+
+\newpage
+\section{Variables}
+\enconstruccion{Definición nominal/conceptual en la Fase 3; operacionalización completa en la
+Fase 5.}
+
+\newpage
+\section{Marco referencial}
+\enconstruccion{Se redacta en la Fase 4 del Curso (Construcción del marco referencial).}
+
+\newpage
+\section{Diseño metodológico}
+\enconstruccion{Se redacta en la Fase 5 del Curso.}
+
+\newpage
+\section{Resultados y discusión}
+\enconstruccion{Se redacta en la Fase 6 del Curso.}
+
+\newpage
+\section{Conclusiones y recomendaciones}
+\enconstruccion{Se redacta en la Fase 7 del Curso.}
+
+\newpage
+\seccionsn{Referencias}
+\begingroup
+\singlespacing
+\begin{thebibliography}{9}
+\setlength{\itemsep}{6pt}
+
+\bibitem{ref:nature}
+[Autores], ``[Título del artículo],'' \textit{Nature}, 2025. [En línea]. Disponible en:
+\url{https://www.nature.com/articles/s41586-025-08832-3}
+
+\bibitem{ref:lund}
+[Autor(es)], ``Pre-release experimentation in indie game development: an interview study,''
+Lund University, Lund, Suecia, 2023. [En línea]. Disponible en:
+\url{https://portal.research.lu.se/en/publications/pre-release-experimentation-in-indie-game-development-an-intervie/}
+
+\bibitem{ref:re2}
+Angel Studios, ``Postmortem: Angel Studios' \textit{Resident Evil 2} N64 version,''
+\textit{Game Developer}. [En línea]. Disponible en:
+\url{https://www.gamedeveloper.com/programming/postmortem-angel-studios-i-resident-evil-2-i-n64-version-}
+
+\bibitem{ref:graduate}
+[Autor(es)], ``What game developers look for in a new graduate: interviews and surveys at one
+game company,'' [En línea]. Disponible en:
+\url{https://paperzz.com/doc/8919447/what-game-developers-look-for-in-a-new-graduate--intervie}
+
+\end{thebibliography}
+\endgroup
+
+\vspace{1em}
+\noindent\textit{\small Esta lista crece con cada sección que se redacte; la numeración se
+reajusta automáticamente para mantener el orden de primera aparición en todo el documento.}
+
+\newpage
+\seccionsn{Anexos}
+\enconstruccion{Reúne los instrumentos usados en cada fase (matriz síntomas-causas, matriz de
+correlación, ficha de causas filtradas, diagrama de Ishikawa, y los que se sumen más
+adelante).}
+
+\end{document}
